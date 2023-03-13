@@ -76,13 +76,10 @@ import models.asignaturas;
                  if (pst.executeUpdate()>0){
                        Alert alerta = new Alert(Alert.AlertType.NONE);
          alerta.setAlertType(Alert.AlertType.INFORMATION);
-         alerta.setHeaderText("Pedido añadido con éxito");
+         alerta.setHeaderText("Alumno añadido con éxito");
          alerta.setTitle("Mensaje de añadido");
      
- 
-             
-                alerta.show();
-               
+                alerta.show(); 
                  };
           } catch (SQLException ex) {
               Logger.getLogger(AlumnosDAOMYSQL.class.getName()).log(Level.SEVERE, null, ex);

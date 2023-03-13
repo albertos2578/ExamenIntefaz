@@ -1,39 +1,33 @@
 package com.mycompany.jdbc_fx;
 
-import controler.Conexion;
 import controler.AlumnosDAOMYSQL;
-import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import models.asignaturas;
+import net.sf.jasperreports.engine.JRException;
 
 public class PrimaryController implements Initializable {
-     //el modal es un alert
+     
     static AlumnosDAOMYSQL dau = new AlumnosDAOMYSQL();
-    ArrayList<Timestamp> tiemposDePedidos = new ArrayList<Timestamp>();
-    int numerito;
+   
     asignaturas pedidosActualizar= new asignaturas();     
    
     @FXML
@@ -121,27 +115,27 @@ private void añadirAlumno(ActionEvent event) {
         return;
     }
     nuevoAlumno.setDI(Integer.parseInt(DI.getText()));
-    
+    // Validar el campo SGE
     if (!validarNumeroEntreCeroYDiez(SGE)) {
         return;
     }
     nuevoAlumno.setSGE(Integer.parseInt(SGE.getText()));
-    
+    // Validar el campo PMDM
     if (!validarNumeroEntreCeroYDiez(PMDM)) {
         return;
     }
     nuevoAlumno.setPMDM(Integer.parseInt(PMDM.getText()));
-    
+    // Validar el campo PSP
     if (!validarNumeroEntreCeroYDiez(PSP)) {
         return;
     }
     nuevoAlumno.setPSP(Integer.parseInt(PSP.getText()));
-    
+    // Validar el campo EIE
     if (!validarNumeroEntreCeroYDiez(EIE)) {
         return;
     }
     nuevoAlumno.setEIE(Integer.parseInt(EIE.getText()));
-    
+    // Validar el campo HLC
     if (!validarNumeroEntreCeroYDiez(HLC)) {
         return;
     }
@@ -152,6 +146,15 @@ private void añadirAlumno(ActionEvent event) {
        ArrayList<asignaturas> items= dau.getAllAlumnos();
     var   itemss = FXCollections.observableList(items);
        this.tabla.setItems(itemss);
+       Nombre.setText("");
+       Apellidos.setText("");
+       AD.setText("");
+       DI.setText("");
+       EIE.setText("");
+       PSP.setText("");
+       HLC.setText("");
+       PMDM.setText("");
+       SGE.setText("");
 }
     
 public boolean validarNumeroEntreCeroYDiez(TextField textField) {
@@ -179,18 +182,28 @@ public boolean validarNumeroEntreCeroYDiez(TextField textField) {
         return false;
     }
 }
-    
 
     @FXML
     private void salir(ActionEvent event) {
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    stage.close();
     }
 
     @FXML
     private void Descargar(ActionEvent event) {
+         try {
+            Informe.showReport();
+        } catch (JRException | ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Informe.pdfReport();
+        } catch (JRException | ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-
-    @FXML
-private void mostrarPedido(MouseEvent event) {
+@FXML
+private void mostrarAlumno(MouseEvent event) {
     asignaturas asig = tabla.getSelectionModel().getSelectedItem();
     if (asig != null) {
         Alert alert = new Alert(AlertType.INFORMATION);
@@ -241,4 +254,6 @@ private void mostrarPedido(MouseEvent event) {
         alert.showAndWait();
     }
 }
+
+    
 }

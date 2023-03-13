@@ -6,10 +6,10 @@ module com.mycompany.jdbc_fx {
     requires java.naming;
     requires java.sql;
     requires java.base;
-    requires lombok;
     requires javafx.base;
     requires javafx.graphics;
-    
+    requires jasperreports;
+    requires javafx.swing;
     
     opens com.mycompany.jdbc_fx to javafx.fxml;
     opens models;
